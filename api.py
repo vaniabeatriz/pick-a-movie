@@ -43,6 +43,8 @@ class MovieFetcher:
         return random_movie_id
 
     def fetch_movie(self): # now, do an actual movie search, using the random number we just made
+        # in case the request fails or it returns an adult movie it will raise an exception
+        # TODO: we could probably handle it in a better way
         movie_id = self.random_movie_id()
         params = {"adult": False}
         endpoint = f"{self.base_url}{movie_id}?api_key={self.api_key}"
