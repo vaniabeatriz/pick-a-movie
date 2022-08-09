@@ -2,21 +2,16 @@ import requests
 import config
 import random
 
-api_key = config.api_key
-base_url = "https://api.themoviedb.org/3/movie/" #our query will come from the "latest" movie section, this is a live, and continuously updated part of the api
-endpoint = f"{base_url}latest?api_key={api_key}"
 
+class MovieFetcher:
+    api_key = config.api_key
+    base_url = "https://api.themoviedb.org/3/movie/"  # our query will come from the "latest" movie section, this is a live, and continuously updated part of the api
+    latest_endpoint = f"{base_url}latest?api_key={api_key}"
+    base_file_url = "https://image.tmdb.org/t/p/w500/"
+    no_poster_url = "https://www.prokerala.com/movies/assets/img/no-poster-available.webp"
 
-class api_requests():
     def __init__(self):
-        self.query_latest_data["id"]
-        response = requests.get(endpoint, timeout=5)
-
-        if response.status_code == 200:
-            print("Successful!")
-        else:
-            print("There was an error")
-            raise Exception  # more to do here with exceptions
+        self.movie_dict = {}
 
         # try:
         #     response = requests.get('url', timeout=5)
@@ -31,27 +26,51 @@ class api_requests():
         # except requests.exceptions.RequestException as err:
         #     print(err)
 
-
-    def query_latest(): # get the latest film uploaded, grab the id, that's all we need
-        response = requests.get(endpoint, timeout=5)
+    def latest_id(self):  # get the latest film uploaded, grab the id, that's all we need
+        response = requests.get(self.latest_endpoint, timeout=5)
+        if response.status_code == 200:
+            print("Successful!")
+        else:
+            print(f"Sorry! There was an error")
+            raise Exception
         query_latest_data = response.json()
-        latest_id = (query_latest_data["id"])
-        return(latest_id)
+        latest_id = query_latest_data["id"]
+        return int(latest_id)
 
+    def random_movie_id(self): # use the id we just grabbed, put it as the last number in the range, do a lil random action
+        last_movie_id = self.latest_id()
+        random_movie_id = random.randint(1, last_movie_id)
+        return random_movie_id
 
-    def randomise(): # use the id we just grabbed, put it as the last number in the range, do a lil random action
-        r = int(latest_id)
-        random_movie_id = random.randint(1,r)
-        return(random_movie_id)
-
-
-    def query_search(): # now, do an actual movie search, using the random number we just made
+    def fetch_movie(self): # now, do an actual movie search, using the random number we just made
+        movie_id = self.random_movie_id()
         params = {"adult": False}
-        endpoint2 = f"{base_url}{random_movie_id}?api_key={api_key}"
-        response2 = requests.get(endpoint2, params=params, timeout=5)
-        query_latest_data = response2.json()
-        return query_latest_data
-        print(query_latest_data)
+        endpoint = f"{self.base_url}{movie_id}?api_key={self.api_key}"
+        response = requests.get(endpoint, params=params, timeout=5)
+        response_json = response.json()
+        if response.status_code != 200:
+            print(f"Sorry! There was an error. Status code: {response.status_code}")
+            raise Exception
+        if response_json['adult']:
+            print("Adult movie not allowed")
+            raise Exception
+        self.movie_dict = response.json()
+        # print(movie_result)
+
+    def get_poster_url(self, poster_path):
+        if poster_path:
+            return f"{self.base_file_url}{poster_path}"
+        else:
+            return self.no_poster_url
+
+    def as_json(self):
+        return {
+            'id': self.movie_dict['id'],
+            'title': self.movie_dict['title'],
+            'genres': self.movie_dict['genres'],
+            'poster_url':  self.get_poster_url(self.movie_dict['poster_path']),
+            'rating': self.movie_dict['vote_average']
+        }
 
 
     #def go_again(): # woo boy, that gave us nothing good, lets randomise again!
@@ -92,7 +111,7 @@ class api_requests():
 
 
 #random_film # code for randomising
-""" best way of returning a random film is to pull from latest - this is continously updated and sequentally - meaning the last film will have the highest id number, so we can
+""" best way of returning a random film is to pull from latest - this is continuously updated and sequentially - meaning the last film will have the highest id number, so we can
 1. find out the latest film id
 2. use that number to create a range (1 - latest_id)
 3. randomise
