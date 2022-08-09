@@ -9,8 +9,10 @@ def home():
     return render_template('index.html')
     # return 'Hello! this is the main page <h1>Hello</h1>'
 
-@app.route('/second/')
+@app.route('/second/', methods="POST", "GET"])
 def second():
+    if request.method == "POST":
+        result = request.form["poster_path"]
     return render_template('secondpage.html')
 
 if __name__== '__main__':
