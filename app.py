@@ -30,4 +30,4 @@ def page_not_found(_e):
 
 
 if __name__== '__main__':
-    app.run() #adding #debug=False still get internal server error
+    app.run(debug=True)
