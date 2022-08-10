@@ -67,11 +67,8 @@ class MovieFetcher:
 
     def as_json(self):
         return {
-            'id': self.movie_dict['id'],
             'title': self.movie_dict['title'],
-            'genres': self.movie_dict['genres'],
             'poster_url':  self.get_poster_url(self.movie_dict['poster_path']),
-            'rating': self.movie_dict['vote_average']
         }
 
 
