@@ -25,7 +25,7 @@ def page_not_found(_e):
 
 
 @app.errorhandler(500)
-def page_not_found(_e):
+def internal_error(_e):
     return render_template('500.html'), 500
 
 
