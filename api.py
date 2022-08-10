@@ -42,22 +42,19 @@ class MovieFetcher:
         random_movie_id = random.randint(1, last_movie_id)
         return random_movie_id
 
-    def fetch_movie(self): # now, do an actual movie search, using the random number we just made
-        # in case the request fails or it returns an adult movie it will raise an exception
-        # TODO: we could probably handle it in a better way
+    def fetch_movie(self):
+        # now, do an actual movie get, using the random number we just made
+        # in case the request fails or it returns an adult movie it will keep trying with a different random id
         movie_id = self.random_movie_id()
         params = {"adult": False}
         endpoint = f"{self.base_url}{movie_id}?api_key={self.api_key}"
         response = requests.get(endpoint, params=params, timeout=5)
         response_json = response.json()
-        if response.status_code != 200:
-            print(f"Sorry! There was an error. Status code: {response.status_code}")
-            raise Exception
-        if response_json['adult']:
-            print("Adult movie not allowed")
-            raise Exception
-        self.movie_dict = response.json()
-        # print(movie_result)
+        if response.status_code != 200 or response_json['adult']:
+            print(f"Invalid result. Status code {response.status_code}")
+            self.fetch_movie()
+        else:
+            self.movie_dict = response.json()
 
     def get_poster_url(self, poster_path):
         if poster_path:
@@ -67,11 +64,8 @@ class MovieFetcher:
 
     def as_json(self):
         return {
-            'id': self.movie_dict['id'],
             'title': self.movie_dict['title'],
-            'genres': self.movie_dict['genres'],
             'poster_url':  self.get_poster_url(self.movie_dict['poster_path']),
-            'rating': self.movie_dict['vote_average']
         }
 
 
