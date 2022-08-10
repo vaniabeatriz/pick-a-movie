@@ -19,5 +19,10 @@ def movie_result():
     return render_template('movie_result.html', movie=movie_json)
 
 
+@app.errorhandler(404)
+def page_not_found(_e):
+    return render_template('404.html'), 404
+
+
 if __name__== '__main__':
     app.run() #adding #debug=False still get internal server error
