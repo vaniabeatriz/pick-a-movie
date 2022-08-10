@@ -10,22 +10,9 @@ driver = webdriver.Chrome(PATH)
 driver.maximize_window()
 driver.get("http://127.0.0.1:5000")
 
-# test for looking for home element
+# test case for rerendering 20 times to test the user experience (how many movies user can see before the page crashes)
 
 try:
-    page_title = driver.title
-    assert page_title == "Decision Making App"
-    driver.find_element(By.LINK_TEXT, "Home")
-
-except NoSuchElementException:
-    print("cannot find home element")
-
-finally:
-    driver.close()
-# test for missing element, if the button doesn't exist/work then our page is broken
-#
-try:
-
     link = driver.find_element(By.LINK_TEXT, 'Click to get a film!')
     link.click()
 
@@ -34,8 +21,7 @@ try:
         driver.find_element(By.LINK_TEXT, 'Get another movie').click()
 
 except NoSuchElementException:
-    print("the web crashed after clicking on get another movie", {x},"times")
+    print("the web crashed after clicking on get another movie", {x}, "times")
 
 finally:
     driver.close()
-
