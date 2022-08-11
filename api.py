@@ -70,7 +70,8 @@ class MovieFetcher:
         return {
             'title': self.movie_dict['title'],
             'poster_url':  self.get_poster_url(self.movie_dict['poster_path']),
-            'movie_link': self.get_movie_link(self.movie_dict['movie_link']), # HB added in this line, not 100% sure correct?
+            'movie_link': self.get_movie_link(), # HB added in this line, not 100% sure correct?
+
         }
 
 
