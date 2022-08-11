@@ -63,14 +63,14 @@ class MovieFetcher:
             return self.no_poster_url
 
     def get_movie_link(self):  # link to themoviedatabase's own url for picked movie
-        movie_link = f"http://www.themoviedb.org/movie/{self.random_movie_id}"
+        movie_link = f"http://www.themoviedb.org/movie/{self.movie_dict['id']}"
         return movie_link # HB added in PN code please review then delete this comment
 
     def as_json(self):
         return {
             'title': self.movie_dict['title'],
             'poster_url':  self.get_poster_url(self.movie_dict['poster_path']),
-            'movie_link': self.get_movie_link(self.movie_dict['movie_link']), # HB added in this line, not 100% sure correct?
+            'movie_link': self.get_movie_link(), # HB added in this line, not 100% sure correct?
         }
 
 

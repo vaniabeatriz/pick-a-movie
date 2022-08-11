@@ -11,7 +11,7 @@ def home():
     return render_template('index.html')
 
 
-@app.route('/movie_result')
+@app.route('/movie_result/')
 def movie_result():
     movie = MovieFetcher()
     movie.fetch_movie()
