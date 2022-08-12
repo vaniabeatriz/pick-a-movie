@@ -1,5 +1,5 @@
 import unittest
-from api import MovieFetcher
+from src.api import MovieFetcher
 
 
 class TestMovieFetcher(unittest.TestCase):
@@ -15,7 +15,11 @@ class TestMovieFetcher(unittest.TestCase):
         self.assertEqual("https://www.prokerala.com/movies/assets/img/no-poster-available.webp", result)
 
     def test_as_json(self):
-        self.movie.movie_dict = {'title': 'Amelie Poulain', 'poster_path': 'amelie.jpg'}
+        self.movie.movie_dict = {'id': 123, 'title': 'Amelie Poulain', 'poster_path': 'amelie.jpg'}
         result = self.movie.as_json()
-        expected = {'title': 'Amelie Poulain', 'poster_url': 'https://image.tmdb.org/t/p/w500/amelie.jpg'}
+        expected = {
+            'title': 'Amelie Poulain',
+            'poster_url': 'https://image.tmdb.org/t/p/w500/amelie.jpg',
+            'movie_link': 'http://www.themoviedb.org/movie/123'
+        }
         self.assertEqual(expected, result)

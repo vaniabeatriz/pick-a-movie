@@ -1,5 +1,5 @@
 import unittest
-from app import app
+from src.app import app
 
 
 class TestApp(unittest.TestCase):
@@ -19,8 +19,13 @@ class TestApp(unittest.TestCase):
 
     def test_movie_result_response(self):
         """It returns a valid response for the Movie result webpage"""
-        response = self.client.get("/movie_result")
+        response = self.client.get("/movie_result/")
         self.assertEqual(response.status_code, 200)
+
+    def test_movie_result_old_url_redirect(self):
+        """It returns a valid response for the Movie result webpage"""
+        response = self.client.get("/movie_result")
+        self.assertEqual(response.status_code, 308)
 
     def test_page_not_found(self):
         """ It returns a page not found response """
