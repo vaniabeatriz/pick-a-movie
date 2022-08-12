@@ -14,7 +14,7 @@ i.e. git checkout -b zilings-awesome-branch
 
 Start the server in your local machine 
 ```
-$ python app.py
+$ python main.py
 ```
 
 Click the url [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
