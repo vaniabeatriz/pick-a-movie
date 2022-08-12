@@ -4,7 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 
-class browser_test(unittest.TestCase):
+class BrowserTest(unittest.TestCase):
 
     def setUp(self):
         self.driver = webdriver.Chrome("C:\Program Files\chromedriver.exe")
@@ -22,8 +22,13 @@ class browser_test(unittest.TestCase):
 
     def test_get_a_film_title(self):
         self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
-        element = self.driver.find_element(By.TAG_NAME, "p").text
+        element = self.driver.find_element(By.TAG_NAME, "h1").text
         self.assertIn('Title:', element)
+
+    def test_get_film_link(self):
+        self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
+        element = self.driver.find_element(By.TAG_NAME, "p").text
+        self.assertIn('TMDB link:', element)
 
     def test_get_a_film_image_for_200_response(self):
         self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
@@ -36,7 +41,7 @@ class browser_test(unittest.TestCase):
         self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
         self.driver.find_element(By.LINK_TEXT, 'Get another movie').click()
         self.assertIn("Your movie", self.driver.title)
-        element = self.driver.find_element(By.TAG_NAME, "p").text
+        element = self.driver.find_element(By.TAG_NAME, "h1").text
         self.assertIn('Title:', element)
 
     def tearDown(self):
