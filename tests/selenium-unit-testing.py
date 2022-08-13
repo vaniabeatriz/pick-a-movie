@@ -30,12 +30,11 @@ class BrowserTest(unittest.TestCase):
         element = self.driver.find_element(By.TAG_NAME, "p").text
         self.assertIn('TMDB link:', element)
 
-    def test_get_a_film_image_for_200_response(self):
+    def test_film_image_display(self):
         self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
         element = self.driver.find_element(By.TAG_NAME, "img")
-        src = element.get_attribute("src")
-        r = requests.get(src)
-        self.assertEqual(r.status_code, 200)
+        image_present = element.is_displayed()
+        self.assertTrue(image_present, "No image present")
 
     def test_get_another_movie(self):
         self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
@@ -43,6 +42,15 @@ class BrowserTest(unittest.TestCase):
         self.assertIn("Your movie", self.driver.title)
         element = self.driver.find_element(By.TAG_NAME, "h1").text
         self.assertIn('Title:', element)
+
+    def test_get_movie_link(self):
+        self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
+        movie_url = self.driver.find_element(By.LINK_TEXT, 'Click for more info').get_attribute('href')
+        movie_title = self.driver.find_element(By.TAG_NAME, 'h1').text
+        self.driver.get(movie_url)
+        tmdb_movie_title = self.driver.find_element(By.TAG_NAME, "a").text
+        self.driver.implicitly_wait(3)
+        self.assertIn(tmdb_movie_title, movie_title)
 
     def tearDown(self):
         self.driver.close()
