@@ -28,4 +28,4 @@ def internal_error(_e):
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=7700)
+    app.run()
