@@ -1,5 +1,4 @@
 import unittest
-import requests
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
@@ -45,7 +44,8 @@ class BrowserTest(unittest.TestCase):
 
     def test_get_movie_link(self):
         self.driver.find_element(By.LINK_TEXT, 'Click to get a film!').click()
-        movie_url = self.driver.find_element(By.LINK_TEXT, 'Click for more info').get_attribute('href')
+        movie_url = self.driver.find_element(
+            By.LINK_TEXT, 'Click for more info').get_attribute('href')
         movie_title = self.driver.find_element(By.TAG_NAME, 'h1').text
         self.driver.get(movie_url)
         tmdb_movie_title = self.driver.find_element(By.TAG_NAME, "a").text
