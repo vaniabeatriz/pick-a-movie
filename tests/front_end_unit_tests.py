@@ -8,6 +8,7 @@ class BrowserTest(unittest.TestCase):
     def setUp(self):
         self.driver = webdriver.Chrome("C:\Program Files\chromedriver.exe")
         self.driver.get("http://127.0.0.1:5000")
+        self.driver.maximize_window()
 
     def test_title(self):
         self.assertIn("Pick A Movie", self.driver.title)
