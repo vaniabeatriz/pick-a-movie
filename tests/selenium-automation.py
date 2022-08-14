@@ -10,7 +10,7 @@ driver = webdriver.Chrome(PATH)
 driver.maximize_window()
 driver.get("http://127.0.0.1:5000")
 
-# test case for rerendering 20 times to test the user experience (how many movies user can see before the page crashes)
+# test case for rerendering 20 times to test the user experience (how many movies the user can view before the page crashes)
 
 try:
     link = driver.find_element(By.LINK_TEXT, 'Click to get a film!')

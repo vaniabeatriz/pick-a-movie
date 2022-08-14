@@ -23,3 +23,22 @@ class TestMovieFetcher(unittest.TestCase):
             'movie_link': 'http://www.themoviedb.org/movie/123'
         }
         self.assertEqual(expected, result)
+
+    def test_type_latest_id(self):
+        result = self.movie.latest_id()
+        message = "the latest_id variable is not an int type"
+        self.assertIs(type(result), int, message)
+
+    def test_type_random_movie_id(self):
+        result = self.movie.random_movie_id()
+        message = "the random_movie_id variable is not an int type"
+        self.assertIs(type(result), int, message)
+
+    def test_type_movie_dict(self):
+        result = self.movie.movie_dict
+        message = "the movie_dict variable is not a dict type"
+        self.assertIs(type(result), dict, message)
+
+
+if __name__ == '__main__':
+    unittest.main()
