@@ -12,6 +12,12 @@ i.e. git checkout -b zilings-awesome-branch
 
 ## How to run flask locally
 
+Install the required modules (flask>=2.1, requests) using the setup.py file.
+
+```
+$ pip install -e .
+```
+
 Start the server in your local machine 
 ```
 $ python main.py
