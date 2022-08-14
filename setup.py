@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 # The setup tools is a library that helps in building, distributing, and installing modules required to run the App.
 
 setup(
-    name='Decision Making App',
+    name='Pick A Movie',
     version='1.0.0',
     url='https://github.com/Z-Guo/Decision-Making-App.git',
     author='HelenPhoenixVaniaZiling',
