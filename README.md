@@ -16,10 +16,10 @@ Pick A Movie is a web-browser application displaying a random selection of movie
 
 ## Run Flask
 
-Install the required modules (flask>=2.1, requests) using the setup.py file.
+Install the required modules (flask>=2.1, requests) using the requirements.txt file.
 
 ```
-$ pip install -e .
+$ pip install -r requirements.txt
 ```
 
 Start the server in your local machine
