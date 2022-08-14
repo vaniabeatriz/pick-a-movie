@@ -10,7 +10,7 @@ class BrowserTest(unittest.TestCase):
         self.driver.get("http://127.0.0.1:5000")
 
     def test_title(self):
-        self.assertIn("Decision Making App", self.driver.title)
+        self.assertIn("Pick A Movie", self.driver.title)
 
     def test_home_button(self):
         self.driver.find_element(By.LINK_TEXT, "Home")
