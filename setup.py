@@ -1,5 +1,7 @@
 from setuptools import setup, find_packages
 
+# The setup tools is a library that helps in building, distributing, and installing modules required to run the App.
+
 setup(
     name='Decision Making App',
     version='1.0.0',

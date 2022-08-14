@@ -1,16 +1,16 @@
 from flask import Flask, render_template
 from src.api import MovieFetcher
 
-app = Flask(__name__)
+app = Flask(__name__)  # This instantiate the Flask server.
 
 
 # Creates the pages of the website
-@app.route('/')
+@app.route('/')  # This decorator creates a route to the root path.
 def home():
     return render_template('index.html')
 
 
-@app.route('/movie_result/')
+@app.route('/movie_result/')  # This decorator creates a route to the movie_result path
 def movie_result():
     movie = MovieFetcher()
     movie.fetch_movie()
