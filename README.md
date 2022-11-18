@@ -10,7 +10,6 @@ Pick A Movie is a web-browser application displaying a random selection of movie
 - Flask: v2.2.2
 - BootStrap: v5.2.0
 
-
 ![Pick A Movie  (1)](https://user-images.githubusercontent.com/82909032/184543983-8ce4264c-ecd7-4cc3-9a49-541c00c42904.png)
 
 
@@ -26,6 +25,12 @@ Start the server in your local machine
 
 ```
 $ python main.py
+```
+## Database
+
+Install MySQL database 
+```
+https://dev.mysql.com/doc/refman/8.0/en/ 
 ```
 
 Click the url [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
