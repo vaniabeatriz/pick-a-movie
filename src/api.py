@@ -1,6 +1,8 @@
 import requests
 import src.config as config
 import random
+import mysql.connector
+import os
 
 
 class MovieFetcher:
@@ -64,6 +66,23 @@ class MovieFetcher:
             self.fetch_movie()
         else:
             self.movie_dict = response.json()
+            self.log_movie()
+
+    def log_movie(self):
+            connection = mysql.connector.connect(
+                host=os.getenv('MYSQL_HOST'),
+                user=os.getenv('MYSQL_USERNAME'),
+                password=os.getenv('MYSQL_PASSWORD'),
+                database='pick_a_movie',
+            )
+            cursor = connection.cursor()
+            has_poster = True if self.movie_dict['poster_path'] else False
+            movie_id = self.movie_dict['id']
+            command = f'INSERT INTO suggested_movies (movie_id, has_poster) VALUES ("{movie_id}", {has_poster})'
+            cursor.execute(command)
+            connection.commit()
+            cursor.close()
+            connection.close()
 
     def get_poster_url(self, poster_path):  # Make img link poster of movie (if poster not available on tmdb, blank pic)
         if poster_path:
