@@ -53,36 +53,67 @@ class MovieFetcher:
     def random_movie_id(self):  # Getting a random int using the range of 1 - the last id we just retrieved
         last_movie_id = self.latest_id()
         random_movie_id = random.randint(1, last_movie_id)
+        if not self.valid_movie(random_movie_id):
+            self.random_movie_id()
         return random_movie_id
 
     def fetch_movie(self):  # Fetching the movie from the id we just randomly generated
         #  In case the request fails or it returns an adult movie it will keep trying with a different random id
         movie_id = self.random_movie_id()
         endpoint = f"{self.base_url}{movie_id}?api_key={self.api_key}"
+        print(endpoint)
         response = requests.get(endpoint, timeout=5)
         response_json = response.json()
         if response.status_code != 200 or response_json["adult"]:
             print(f"Invalid result. Status code {response.status_code}")
             self.fetch_movie()
         else:
-            self.movie_dict = response.json()
-            self.log_movie()
+            if not response_json['poster_path']:
+                print("Movie without poster!")
+                self.log_movie(movie_id, False)
+                self.fetch_movie()
+            else:
+                self.movie_dict = response.json()
+                self.log_movie(movie_id, True)
 
-    def log_movie(self):
-            connection = mysql.connector.connect(
-                host=os.getenv('MYSQL_HOST'),
-                user=os.getenv('MYSQL_USERNAME'),
-                password=os.getenv('MYSQL_PASSWORD'),
-                database='pick_a_movie',
-            )
-            cursor = connection.cursor()
-            has_poster = True if self.movie_dict['poster_path'] else False
-            movie_id = self.movie_dict['id']
-            command = f'INSERT INTO suggested_movies (movie_id, has_poster) VALUES ("{movie_id}", {has_poster})'
-            cursor.execute(command)
-            connection.commit()
-            cursor.close()
-            connection.close()
+    @property
+    def db_conn(self):
+        return mysql.connector.connect(
+            host=os.getenv('MYSQL_HOST'),
+            user=os.getenv('MYSQL_USERNAME'),
+            password=os.getenv('MYSQL_PASSWORD'),
+            database='pick_a_movie',
+        )
+
+    def log_movie(self, movie_id, has_poster):
+        connection = mysql.connector.connect(
+            host=os.getenv('MYSQL_HOST'),
+            user=os.getenv('MYSQL_USERNAME'),
+            password=os.getenv('MYSQL_PASSWORD'),
+            database='pick_a_movie',
+        )
+        cursor = connection.cursor()
+        command = f'INSERT INTO suggested_movies (movie_id, has_poster) VALUES ("{movie_id}", {has_poster})'
+        cursor.execute(command)
+        connection.commit()
+
+    def valid_movie(self, movie_id):
+        connection = mysql.connector.connect(
+            host=os.getenv('MYSQL_HOST'),
+            user=os.getenv('MYSQL_USERNAME'),
+            password=os.getenv('MYSQL_PASSWORD'),
+            database='pick_a_movie',
+        )
+        cursor = connection.cursor()
+        command = f'SELECT has_poster FROM suggested_movies WHERE movie_id = {movie_id}'
+        cursor.execute(command)
+        result = cursor.fetchone()
+        # if not result:
+        #     return True
+        if not result or result[0] == 1:
+            return True
+        else:
+            return False
 
     def get_poster_url(self, poster_path):  # Make img link poster of movie (if poster not available on tmdb, blank pic)
         if poster_path:
